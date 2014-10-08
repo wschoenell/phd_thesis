@@ -61,7 +61,7 @@
 \def\@citex[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
   \def\@citea{}\@cite{\@for\@citeb:=#2\do
     {\@citea\def\@citea{; }\@ifundefined
-       {b@\@citeb}{{\bf ?}\@warning
+       {b@\@citeb}{\textbf{?}\@warning
        {Citation `\@citeb' on page \thepage \space undefined}}%
 {\csname b@\@citeb\endcsname}}}{#1}}
 

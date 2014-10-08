@@ -223,7 +223,7 @@ FUNCTION {field.or.null}
 FUNCTION {boldface}
 { duplicate$ empty$
     { pop$ "" }
-    { "{\bf " swap$ * "}" * }
+    { "\textbf{" swap$ * "}" * }
   if$
 }
 
