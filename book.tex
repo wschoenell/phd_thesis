@@ -6,8 +6,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx,sidecap,tikz}
 \usepackage{siunitx} % automatic number formatting, decimal point alignment
-\usepackage{hyperref} % automatic links to sections, figures, http, etc...
+\usepackage[breaklinks=true]{hyperref} % automatic links to sections, figures, http, etc...
 \usepackage{textcomp} % needed to the \bullet symbol on lists
+
+% BibTex references
+\usepackage[]{natbib}
+\usepackage{aas_macros} % Astronomical Journals abreviations
+\bibliographystyle{astron} % Astronomy bibliography style
 
 % To get lining figures in tables set by siunitx, which apparently uses the
 % \mathrm font instead of \mathnormal
@@ -317,7 +322,7 @@ This is a section to test the text styling.
 
 \subsection{References}
 
-The figure \ref{fig:myfig} is cool. The table \ref{tab:the-numbers}, this awesome chapter \ref{chap:my-chap} and the section \ref{sec:call-for-humanity} .
+The figure \ref{fig:myfig} is cool. The table \ref{tab:the-numbers}, this awesome chapter \ref{chap:my-chap} and the section \ref{sec:call-for-humanity}. I can also cite my friend \cite{vanDongen:2012} or mention it by \citep{Lamport:94} or try to cite my best friend with other guy \citep{CidFernandes.etal.2005a,Lamport:94}.
 
 \subsection{Lists}
 
@@ -547,5 +552,28 @@ Prove this Theorem~\ref{thm:py} by the algebra \(a^2+b^2 =(p^2-q^2)^2+(2pq)^2
 =p^4-2p^2q^2+q^4+4p^2q^2
 =p^4+2p^2q^2+q^4
 =(p^2+q^2)^2 =c^2\).
+
+\bibliography{references}
+
+%  Natbib citation types...
+%    \citet{key}              ==>>  Jones et al. (1990)
+%    \citep{key}              ==>>  (Jones et al. 1990)
+%    \citep{key1,key2,...}    ==>>  (Jones et al. 1990; Smith 1989; ...)
+%                                or (Jones et al. 1990, 1991; ...)
+%                                or (Jones et al. 1990a,b; ...)
+%    \citep*{key}             ==>>  (Jones, Baker, & Williams 1990)
+%    \citep[chap. 2]{key}     ==>>  (Jones et al., 1990, chap. 2)
+%    \citep[e.g.][]{key}      ==>>  (e.g. Jones et al., 1990)
+%    \citep[see][p. 34]{key}  ==>>  (see Jones et al., 1990, p. 34)
+%    \citealt{key}            ==>>  Jones et al., 1990
+%    \citealt*{key}           ==>>  Jones, Baker, & Williams, 1990
+%    \citealp{key}            ==>>  Jones et al. 1990
+%    \citealp*{key}           ==>>  Jones, Baker, & Williams 1990
+%    \citeauthor{key}         ==>>  Jones et al.
+%    \citeauthor*{key}        ==>>  Jones, Baker, & Williams
+%    \citeyear{key}           ==>>  1990
+%    \citeyearpar{key}        ==>>  (1990)
+%    \citetext{priv. comm.}   ==>>  (priv. comm.)
+
 
 \end{document}
