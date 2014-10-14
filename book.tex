@@ -18,6 +18,9 @@
 % \mathrm font instead of \mathnormal
 \SetMathAlphabet{\mathrm}{normal}{U}{eur}{m}{n}
 
+%%% William Defs %%% 
+
+
 % =========================
 % = Setting up the layout =
 % =========================
@@ -133,7 +136,23 @@
 \frontmatter
 \thispagestyle{empty}
 
-\mbox{}\vspace{2in}
+\begin{figure}
+	\vspace{-10pt}
+	\begin{adjustwidth*}{-1in}{0pt}
+		\centering
+		\includegraphics[width=0.3\textwidth]{figures/Escudo_de_la_Universidad_de_Granada.pdf}
+	\end{adjustwidth*}
+	\vspace{-15pt}
+\end{figure}
+
+
+\begin{adjustwidth*}{-1in}{0pt}
+	\centering
+	\makebox[0pt]{\scshape{}Universidad de Granada} \par
+	\makebox[0pt]{\scshape{}FisyMat} \par
+\end{adjustwidth*}
+
+\mbox{}\vspace{1.8in}
 \noindent
 \begin{flushright}
 {\LARGE\itshape{}a}\hspace{1.5em}{\HUGE\scshape{}Book}\\[2\baselineskip]
@@ -141,7 +160,11 @@
 \end{flushright}
 
 \vspace{6\baselineskip}
-\hfill{\Large\scshape{}Abner Stract}
+\hfill{\LARGE\scshape{}William Schoenell}
+
+\vspace{1\baselineskip}
+\hfill{\Large\scshape{}Advised by: Narciso Ben\'\i tez}
+
 
 \cleartorecto\tableofcontents*
 
