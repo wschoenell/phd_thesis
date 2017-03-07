@@ -295,35 +295,74 @@ inherent tasks to an astronomical observatory.
 \end{itemize}
 
 
-\chapter{A method to measure stellar properties from redshift templates}
+\chapter{A method to measure stellar properties of galaxies from redshift templates}
 
-In this chapter we introduce a new method which we use the photometric redshift probability distribution functions as a proxy to the stellar populations information of galaxies. We start by describing Bayesian Photometric Redshift code from \cite{Benitez.2000a} on section \ref{sec:bpz} and on section \ref{sec:fit}, we introduce our method to derive the stellar populations parameters from the output redshift probability distribution functions (PDFs).
+
+
+In this chapter we introduce a new method which combines the output of a bayesian  photometric redshift code with a stellar population analysis to estimate basic galaxy properties like its stellar mass $M_\star$.
+We start by describing the BPZ code of \cite{Benitez.2000a} on section \ref{sec:bpz} and on section \ref{sec:fit}, we introduce our method to derive the stellar populations parameters from the output redshift probability distribution functions (PDFs).
 
 
 \section{Motivation}
 \label{sec:motivation}
 
-The main motivation of the work described in this chapter is to have a robust method for determining stellar masses without relying in any spectroscopic information. Many authors like \textbf{TODO cite} did stellar masses estimation using stellar population fit techiniques but all them rely on the spectroscopic information to calculate the objects luminosity and, combining with the stellar mass-to-light ratios, determine the stellar masses. 
+The main motivation of the work described in this chapter is to have a robust method for determining stellar masses ($M_\star$) out of photometric data alone, without relying on any spectroscopic information. As explained in the introduction to this thesis, photometric surveys like DES (REF), JPAS (REF), LSST (REF) and many others are one of the main sources of data for observational cosmology and extragalactric astrophysics nowadays. Most of these mega-surveys aim to use the data to estimate galaxy redshifts and address cosmological questions like the nature of dark energy. However, it would certainly be positive/smart to use these same data to learn more about galaxies than their mere redshifts. This is the central motivation of the work presented in this chapter.
+
+
+Many previous studies used photometry to estimate $M_\star$, like REFS.....
+All of these, however, make use of a spectroscopic $z$ to map the observed filter on the galaxy frame and to calculate the objects luminosity, which is then combined with a stellar mass-to-light ratio to determine $M_\star$. Taylor2011, for instance, builds an extensive library of model galaxy spectra, from which photometric fluxes are computed... ugriz... DEIXAR CLARO ONDE ENTRA O z PRO TAYLOR!
+
+
+When spectroscopic redshifts are not This approach is certainly the 
+
+....
+
 
 Photometric redshifts are the cheapest and fastest way for the determination of the distance of galaxies. The precision of these distances is undeniably smaller that the spectroscopic ones but the number of galaxies that can be covered with the same amount of telescope time and the use of the redshift probability distribution functions (PDFs) are shown to be very powerful when the goal is to have a statistical sample.
 
-Also it was shown by many authors \textbf{(cite..)} that using a simple estimator like the maximum likelihood or the likelihood average leads the results to significant biases so any method that rely on photometric redshifts should take in account the full probability distribution function. The survey selection functions of photometric surveys are usually much more simpler than of the spectroscopic surveys, facilitating the account for selection biases on stellar and luminosity function easier.
+Also it was shown by many authors \textbf{(cite..)} that using a simple estimator like the maximum likelihood or the likelihood average leads the results to significant biases so any method that rely on photometric redshifts should take in account the full probability distribution function. The survey selection functions of photometric surveys are usually much simpler than of the spectroscopic surveys, facilitating the account for selection biases on stellar and luminosity function easier.
 
 The non-dependence of spectral redshifts opens our method to a much larger survey datasets and will enable us to have robust stellar masses probability distribution functions to any photometric redshift survey such as DES and JPAS.
 
 
+The method developed here 
 
-%\section{Notation}
-%\label{sec:notation}
-%
-%For ease the pain of reading the next sections, we introduce on this section the concepts of the parameters involved on the redshift and galaxy property estimation and their notations.
-%
-%So, what 
+\begin{enumerate}
 
-\section{Bayesian photometric redshifts method: BPZ}
+\item uses a template expansision trick to ensure realistic....
+
+\item is effeicient
+
+\item is bayesian
+
+\item is a fpitn
+
+\end{enumerate}
+
+\section{Notation}
+\label{sec:notation}
+
+For ease the pain of reading the next sections, we introduce on this section the concepts of the parameters involved on the redshift and galaxy property estimation and their notations.
+
+So, what 
+
+
+
+
+
+\section{Bayesian photometric redshifts: The BPZ method}
 \label{sec:bpz}
 
-For the photometric redshift calculations, we use the baesian photometric redshift code BPZ \citep{Benitez.2000a}. BPZ calculates the probability distribution function (PDF) of the objects being on a redshift $z_i$ and of a spectral type $T_j$.
+\begin{figure}
+\begin{adjustwidth*}{1in}{0pt}
+\centering
+\includegraphics[width=0.7\textwidth]{figures/bpz_templates.pdf}
+\end{adjustwidth*}
+\caption{aa}
+\label{fig:bpz_templates}
+\end{figure}
+
+For the photometric redshift calculations, we use the bayesian photometric redshift code BPZ \citep{Benitez.2000a}. BPZ calculates the probability distribution function (PDF) of the objects being on a redshift $z_i$ and of a spectral type $T_j$.
 
 The redshift probability $p(z_i, T_j|D_l,I)$ for $z_i$ to be the true redshift and $T_j$ be the spectral type of a given observed galaxy with $N_l$ observed fluxes/magnitudes ($D = m_l$, or more conveniently $D = \vec{C}, m_0$ where $\vec{C} = \{m_1 - m0, m_2 - m_0, \ldots\}$ represent the colors between an apparent magnitude $m_0$ and the others)  can be written as:
 \begin{equation}
@@ -332,13 +371,16 @@ p(z_i,T_j|\vec{C}, m_0,  I) = \frac{p(\vec{C}, m_0|z_i,T_j,I) \times p(z_i, T_j|
 
 Accordingly to the Bayes theorem, the left side of the equation is called hypothesis and, on the right side, we have the redshift likelihood times the prior on the numerator and the denominator is the evidence. Since we are just interested on the estimation of the redshift, the evidence turns into an ordinary normalization constant \citep{Sivia.Skilling.2006}.
 
+!!!! explain that y'cause you analyse templates you do it once and then only use the reulst...
+
+
 The redshift likelihood $p(\vec{C}, m_0|z_i,T_j,I)$ can be written as:
 
 \begin{equation}
 p(\vec{C}, m_0|z_i,T_j,I) = e^{-\frac{\chi_{ij}^2}{2}}
 \end{equation}
 
-the $\chi^2$ is given by the sum over all photometric filters $l$ of the quadratic difference between the $i$-th template to the observed flux $f^T_{ij}$ or magnitude $m^T_{ij}$.
+\noindent where $\chi^2$ is given by the sum over all photometric filters $l = 1, \ldots N_l$ of the quadratic difference between the $i$-th template to the observed flux $f^T_{ij}$ or magnitude $m^T_{ij}$.
 
 So, in case of the $\chi^2$ in fluxes, we have:
 
@@ -346,7 +388,7 @@ So, in case of the $\chi^2$ in fluxes, we have:
 \chi^2_{i,j} = \sum_l \left( {f^O_l}^2 - a_{i,j} {f^T_{l,i,j}}^2 \right) w^2_l
 \end{equation}
 
-where $a$ is a template normalization factor which can be calculated by minimizing the $\chi^2$ value. The $w_l$ is a weight factor which is essentially dependent of the error in the observed magnitude, e.g. $w_l = \frac{1}{\sigma_l}$. \footnote{This weight can be changed to accommodate, for example, templates with intrinsic errors, error scaling factors, etc...}
+\noindent where $a$ is a template normalization factor which can be calculated by minimizing the $\chi^2$ value. The $w_l$ is a weight factor which is essentially dependent of the error in the observed magnitude, e.g. $w_l = \frac{1}{\sigma_l}$. \footnote{This weight can be changed to accommodate, for example, templates with intrinsic errors, error scaling factors, etc...}
 
 It can be easily shown that for magnitudes this scaling factor $a_j$ becomes an additive factor, making the magnitude $\chi^2$ in the form:
 
@@ -365,6 +407,12 @@ The first term on the right side of the equation, the template-redshift prior, i
 \label{fig:prior}
 \end{figure}
 
+
+
+\section{Template expansion: A convenient trick}
+\label{sec:TemplateExpansion}
+
+
 \section{From redshift PDFs to stellar properties PDFs}
 \label{sec:fit}
 
@@ -380,7 +428,7 @@ if we want to, at the same time, calculate the PDF of the same galaxy to have st
 p(\vec{\theta}_k, z_i, T_j | \vec{C}, m_0) = p(z_i, T_j|\vec{C}, m_0)p(\vec{\theta}_k|z_i,T_j,\vec{C},m_0)
 \end{equation}
 
-where the right term is given only by the probability product chain rule. \textbf{check this name}
+\noindent where the right term is given only by the probability product chain rule. \textbf{check this name}
 
 Since there is no dependence on $\vec{C}, m_0$ with $\vec{\theta}_k$, we rewrite the equation as
 
@@ -388,7 +436,7 @@ Since there is no dependence on $\vec{C}, m_0$ with $\vec{\theta}_k$, we rewrite
 p(\vec{\theta}_k, z_i, T_j | \vec{C}, m_0) = p(z_i, T_j|\vec{C}, m_0)p(\vec{\theta}_k|z_i,T_j)
 \end{equation}
 
-where $p(z_i, T_j|\vec{C}, m_0)$ is the template-redshift probability distribution function given by BPZ (or any other probabilistic photometric redshift code) which is described on section \ref{sec:bpz} and the stellar population PDF is given by
+\noindent where $p(z_i, T_j|\vec{C}, m_0)$ is the template-redshift probability distribution function given by BPZ (or any other probabilistic photometric redshift code) which is described on section \ref{sec:bpz} and the stellar population PDF is given by
 
 \begin{equation}
 \label{eq:stellar_pop_props}
@@ -502,20 +550,22 @@ This BPZ template magnitudes $m^T_{i,j}$ are going to be fit by a set of random 
 
 %From the remaining steps, we evaluate fine (1000 steps) histograms on all properties. The result is a likelihood array $\p(\vec{\theta}|z_i, T_j)$ with dimension $N_z, N_T, 1000$ which, combined with the photometric redshift $p(z_i,T_j|\vec{C}, m_0)$ on equation \ref{eq:stellar_pop_props} will give us the stellar properties.
 
-\begin{figure}
-\begin{adjustwidth*}{1in}{0pt}
-\centering
-\includegraphics[width=0.7\textwidth]{figures/bpz_templates.pdf}
-\end{adjustwidth*}
-\caption{aa}
-\label{fig:bpz_templates}
-\end{figure}
 
-\section{Stellar masses estimates}
+
+
+
+\section{Stellar mass estimates}
 
 \section{Validation of the SED fitting}
 
 In this section we show some results of simulations to determine how precise one can infer galaxies properties for a given set of magnitudes within the chosen filter set and 
+
+
+
+
+
+\chapter{Application ... the Mass function - alhambra}
+
 
 \section{$V_{MAX}$ PDF}
 \label{sec:vmax}
