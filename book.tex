@@ -19,7 +19,7 @@
 \SetMathAlphabet{\mathrm}{normal}{U}{eur}{m}{n}
 
 %%% William Defs %%% 
-
+\usepackage{pbox}
 
 % =========================
 % = Setting up the layout =
@@ -299,6 +299,20 @@ inherent tasks to an astronomical observatory.
 
 In this chapter we introduce a new method which we use the photometric redshift probability distribution functions as a proxy to the stellar populations information of galaxies. We start by describing Bayesian Photometric Redshift code from \cite{Benitez.2000a} on section \ref{sec:bpz} and on section \ref{sec:fit}, we introduce our method to derive the stellar populations parameters from the output redshift probability distribution functions (PDFs).
 
+
+\section{Motivation}
+\label{sec:motivation}
+
+The main motivation of the work described in this chapter is to have a robust method for determining stellar masses without relying in any spectroscopic information. Many authors like \textbf{TODO cite} did stellar masses estimation using stellar population fit techiniques but all them rely on the spectroscopic information to calculate the objects luminosity and, combining with the stellar mass-to-light ratios, determine the stellar masses. 
+
+Photometric redshifts are the cheapest and fastest way for the determination of the distance of galaxies. The precision of these distances is undeniably smaller that the spectroscopic ones but the number of galaxies that can be covered with the same amount of telescope time and the use of the redshift probability distribution functions (PDFs) are shown to be very powerful when the goal is to have a statistical sample.
+
+Also it was shown by many authors \textbf{(cite..)} that using a simple estimator like the maximum likelihood or the likelihood average leads the results to significant biases so any method that rely on photometric redshifts should take in account the full probability distribution function. The survey selection functions of photometric surveys are usually much more simpler than of the spectroscopic surveys, facilitating the account for selection biases on stellar and luminosity function easier.
+
+The non-dependence of spectral redshifts opens our method to a much larger survey datasets and will enable us to have robust stellar masses probability distribution functions to any photometric redshift survey such as DES and JPAS.
+
+
+
 %\section{Notation}
 %\label{sec:notation}
 %
@@ -309,31 +323,38 @@ In this chapter we introduce a new method which we use the photometric redshift 
 \section{Bayesian photometric redshifts method: BPZ}
 \label{sec:bpz}
 
-For the photometric redshift calculations, we use the baesian photometric redshift code BPZ \citep{Benitez.2000a}. BPZ calculates the probability distribution function (PDF) of the objects being on a redshift and of a spectral type.
+For the photometric redshift calculations, we use the baesian photometric redshift code BPZ \citep{Benitez.2000a}. BPZ calculates the probability distribution function (PDF) of the objects being on a redshift $z_i$ and of a spectral type $T_j$.
 
-The redshift probability $p(z_ij|D_l,I)$ for $z_ij$ to be the true redshift $i$ with spectral type $j$ of a given observed galaxy with $N_l$ observed fluxes/magnitudes ($D = m_l$, or more conveniently $D = \vec{C}, m_0$ where $\vec{C} = \{m_1 - m0, m_2 - m_0, \ldots\}$ represent the colors between an apparent magnitude $m_0$ and the others)  can be written as:
+The redshift probability $p(z_i, T_j|D_l,I)$ for $z_i$ to be the true redshift and $T_j$ be the spectral type of a given observed galaxy with $N_l$ observed fluxes/magnitudes ($D = m_l$, or more conveniently $D = \vec{C}, m_0$ where $\vec{C} = \{m_1 - m0, m_2 - m_0, \ldots\}$ represent the colors between an apparent magnitude $m_0$ and the others)  can be written as:
 \begin{equation}
-p(z_i|\vec{C}, m_0,  I) = \frac{p(\vec{C}, m_0|z_i,I) \times p(z_i|I)}{p(\vec{C}, m_0|I)}
+p(z_i,T_j|\vec{C}, m_0,  I) = \frac{p(\vec{C}, m_0|z_i,T_j,I) \times p(z_i, T_j|I)}{p(\vec{C}, m_0|I)}
 \end{equation}
 
 Accordingly to the Bayes theorem, the left side of the equation is called hypothesis and, on the right side, we have the redshift likelihood times the prior on the numerator and the denominator is the evidence. Since we are just interested on the estimation of the redshift, the evidence turns into an ordinary normalization constant \citep{Sivia.Skilling.2006}.
 
-The redshift likelihood $p(\vec{C}, m_0|z_i,I)$ ca be written as:
+The redshift likelihood $p(\vec{C}, m_0|z_i,T_j,I)$ can be written as:
 
 \begin{equation}
-p(\vec{C}, m_0|z_i,I) = e^{-\frac{\chi_i^2}{2}}
+p(\vec{C}, m_0|z_i,T_j,I) = e^{-\frac{\chi_{ij}^2}{2}}
 \end{equation}
 
-the $\chi^2$ is given by the sum over all photometric filters $l$ of the quadratic difference between the $i$-th template to the observed flux or magnitude $m^T_{i,j}$.
+the $\chi^2$ is given by the sum over all photometric filters $l$ of the quadratic difference between the $i$-th template to the observed flux $f^T_{ij}$ or magnitude $m^T_{ij}$.
 
 So, in case of the $\chi^2$ in fluxes, we have:
 
 \begin{equation}
-\chi^2_j = \sum_l \left( {f^O_l}^2 - a_j {f^T_{l,j}}^2 \right) w^2_l
+\chi^2_{i,j} = \sum_l \left( {f^O_l}^2 - a_{i,j} {f^T_{l,i,j}}^2 \right) w^2_l
 \end{equation}
 
-where $a$ is a template normalization factor which can be calculated by minimizing the $\chi^2$ value. The $w_l$ is a weight factor which is essentially dependent of the error in the observed magnitude, e.g. %$w_l = \frac{1}{\simga_l}$. %\footnote{This weight can be changed to accommodate, for example, templates with intrinsic errors, error scaling factors, etc...}%
+where $a$ is a template normalization factor which can be calculated by minimizing the $\chi^2$ value. The $w_l$ is a weight factor which is essentially dependent of the error in the observed magnitude, e.g. $w_l = \frac{1}{\sigma_l}$. \footnote{This weight can be changed to accommodate, for example, templates with intrinsic errors, error scaling factors, etc...}
 
+It can be easily shown that for magnitudes this scaling factor $a_j$ becomes an additive factor, making the magnitude $\chi^2$ in the form:
+
+\begin{equation}
+\chi^2_{i,j} = \sum_l \left( {m^O_l}^2 - {m^T_{l,i,j} + A_{i,j}}^2 \right) w^2_l
+\end{equation}
+
+The first term on the right side of the equation, the template-redshift prior, is used to modulate the evidence in the form that unrealistic template, redshift and apparent magnitude combinations are less taken in account than more realistic ones. In pratice, two effects are taken in account on this prior: galaxies cannot be too far if they are too bright (i.e. low apparent magnitude $m_0$) and galaxies average colors must be slightly bluer as redhifts increases. This prior distribution is empirically calibrated using colors and spectroscopic redshifts for the Hubble Deep Field North. For more details on the empirical redshift prior distribution, we invite the reader to give a look on \cite{Benitez.2000a}. On figure \ref{fig:prior} \textbf{from benitez e tal, etc..}, the two effects are shown. On the upper panel, we have an example of what would be a redshift likelihood for the different spectral types. On the second panel, the prior is shown with the characteristics metioned before and, on the third and fourth panels the final redshift PDF. Note that if a flat prior were assumed, the most likely redshift for the galaxy would be around 2.8 but, after applying the prior distribution, this peak goes back to around 0.3.
 
 \begin{figure}
 \begin{adjustwidth*}{1in}{0pt}
@@ -341,13 +362,156 @@ where $a$ is a template normalization factor which can be calculated by minimizi
 \includegraphics[width=1.3\textwidth]{figures/figpeaks.eps}
 \end{adjustwidth*}
 \caption{From \cite{Benitez.2000a}. This is a figure, simple and poorly drawn by my computer. The lines, intended to be physical representations of the glittering abstraction of pure length, have come out wobbly, like a plum pudding with too much plum. I will send my computer back to arithmetic class.}
-\label{fig:myfig}
+\label{fig:prior}
 \end{figure}
 
 \section{From redshift PDFs to stellar properties PDFs}
 \label{sec:fit}
 
-Given the PDF of the 
+Given a stellar population spectrum which we denote $S_k$ which is a spectrum composed by a model with $\vec{\theta}_k$ parameters, one can write the probability of this stellar populations parameters be the parameters that reproduce the galaxy colors $\vec{C}$ and apparent magnitude $m_0$ as:
+
+\begin{equation}
+p(\vec{\theta}_k | \vec{C}, m_0)
+\end{equation}
+
+if we want to, at the same time, calculate the PDF of the same galaxy to have stellar properties $\vec{\theta}_k$, redshift $z_i$ and be of the spectral type of $T_j$, we can add up the $z_i$ and $T_j$ terms in the form:
+
+\begin{equation}
+p(\vec{\theta}_k, z_i, T_j | \vec{C}, m_0) = p(z_i, T_j|\vec{C}, m_0)p(\vec{\theta}_k|z_i,T_j,\vec{C},m_0)
+\end{equation}
+
+where the right term is given only by the probability product chain rule. \textbf{check this name}
+
+Since there is no dependence on $\vec{C}, m_0$ with $\vec{\theta}_k$, we rewrite the equation as
+
+\begin{equation}
+p(\vec{\theta}_k, z_i, T_j | \vec{C}, m_0) = p(z_i, T_j|\vec{C}, m_0)p(\vec{\theta}_k|z_i,T_j)
+\end{equation}
+
+where $p(z_i, T_j|\vec{C}, m_0)$ is the template-redshift probability distribution function given by BPZ (or any other probabilistic photometric redshift code) which is described on section \ref{sec:bpz} and the stellar population PDF is given by
+
+\begin{equation}
+\label{eq:stellar_pop_props}
+p(\vec{\theta}_k|z_i,T_j) \propto p_I(\vec{\theta}) p(T_j|\vec{\theta}_k, z_i)
+\end{equation}
+
+Assuming a flat prior will incur that the prior will be dominated by the sampling on $\vec{\theta}_k$ space, therefore $p_I (\vec{\theta}_k) = \delta \vec{\theta}_k$ and the likelihood defined by:
+
+\begin{equation}
+p(T_j|\vec{\theta}_k, z_i) = \mathcal{L}_{i,j,k} = \exp \left( \frac{1}{\sum_l m^S_k - m^T_{i,j} + A_{i,j,k}} \right)
+\end{equation}
+
+where $A_{i,j,k}$, as mentioned on sec. \ref{sec:bpz} is a mere minimization constant and, for our pourposes, will be neglected as it haves no practical meaning.
+
+\section{Algorithm}
+
+\begin{figure}
+\begin{adjustwidth*}{1in}{0pt}
+\centering
+\includegraphics[width=.8\textwidth]{figures/mass_pdf.pdf}
+\end{adjustwidth*}
+\caption{aa}
+\label{fig:algorithm}
+\end{figure}
+
+
+\begin{table}
+\begin{tabular}{
+    cccl
+    %S[table-format=1.3]
+    %S[table-format=3.5e-1]
+    %S[table-format=1.4]
+    %S[table-format=-1.5]
+}\toprule
+{Parameter}&	{Units}	&	{min/max values}	&	{Meaning}	\\ \midrule
+%	$t_0^{Y}$	&	yr	&	$6 \times 10^6$ to $6.3 \times 10^9$	&	Age of the younger burst	\\
+%	$\theta^{Y}$	&	-	&	$0.1$ to $10$	&	$\theta^O = \tau^Y \times t_0^Y$. Where $\tau^Y$ is burst e-folding time	\\
+{$t_0$}&	{yr}	&	{$1 \times 10^6$ to $t_U$}	&	\pbox{5cm}{Age of the exponential burst. $t_U$ is the age of Universe at $z$}	\\
+{$\theta$}&		&	{$0.1$ to $10$}	&	\pbox{5cm}{$\theta = \tau \times t_0$. $\tau$ is burst e-folding time}	\\
+{$Z$}&	{$Z_\odot$}	&	{$0.2, 0.4, 1, 1.5$}	&	\pbox{5cm}{Stellar metallicity}	\\
+{$A_V$}	&	{mag}	&	{$-0.1$ to $2$}	&	\pbox{5cm}{Extinction in $V$-band}	\\
+%Frankness  & {$\aleph_0$} & {Widgets \& Bobbins} & {$\Delta_{\text{funk}}$} & {$r$}    \\ \midrule
+%Crows      & 5.897        & 0.3692               & 0.4679                   & -0.1367  \\ 
+%Malaise    & 5.128        & 1.692e-05            & 0.6395                   & -0.06257 \\ 
+%Lantern    & 6.334        & 0.7099               & 0.57                     & -0.1425  \\ 
+%Rushing    & 15.11        & 0.01569              & 0.3576                   & 0.01739  \\ \midrule
+%Splinters  & 3.753        & 1.084                & 0.2924                   & -0.1632  \\ 
+%Brilliant  & 3.174        & 1.061e+04            & 0.2827                   & -0.2533  \\ 
+%Still      & 3.192        & 1.795e+04            & 0.3066                   & -0.1173  \\ 
+%\midrule
+%Quickening & 2.93         & 250.6                & 0.999                    & -0.02164 \\ 
+%Barter     & 3.437        & 6.625e-06            & 0.8351                   & -0.6018  \\ 
+%Promise    & 9.753        & 16.03                & 0.5062                   & 0.1852   \\ 
+\bottomrule
+\end{tabular}
+
+\caption{These are the numbers that this chapter is all about. As you can see, they are very interesting. Ponder.}
+\label{tab:the-numbers}
+\end{table}
+
+%\begin{table}
+%\label{tab:test}
+%\begin{tabular}{
+%    r
+%    S[table-format=1.3]
+%    S[table-format=3.5e-1]
+%    S[table-format=1.4]
+%    S[table-format=-1.5]
+%}
+%\toprule			
+%%Primary Mirror (M1)	&		\\ \midrule
+%%Curvature radius	&	{$-2471.295 mm$ concave}	\\
+%%Conic constant	&	-1.163946	\\
+%%Optical Diameter	&	{$826 mm$}	\\
+%%Central hole	&	\textbf{TODO}	\\
+%%Used clear aperture	&	\textbf{TODO}	\\
+%%Effective collecting area	&	{$0.44 m^2$}	\\ \midrule
+%%Secondary F/4.5 mirror (M2)	&		\\ \midrule
+%%Distance from Primary	&	{$825.7695 mm$}	\\
+%%Radius of curvature	&	{$-1237.411 mm$ convex}	\\
+%%Conic constant	&	-5.776745	\\
+%%Optical Diameter	&	{$302.879 mm$}	\\
+%
+%Parameter & Units & min/max values & Meaning \\ \midrule
+%% $t_0^{Y}$ & yr & $6 \times 10^6$ to $6.3 \times 10^9$ & Age of the younger burst \\
+%% $\theta^{Y}$ & - & $0.1$ to $10$ & $\theta^O = \tau^Y \times t_0^Y$. Where $\tau^Y$ is burst e-folding time \\
+% $t_0$ & yr & $1 \times 10^6$ to $t_U$ & Age of the exponential burst. Upper limit $t_U$ is the age of Universe at $z$ \\
+% $\theta$ & - & $0.1$ to $10$ & $\theta = \tau \times t_0$. Where $\tau$ is burst e-folding time \\
+% $Z$ & $Z_\odot$ & 0.2, 0.4, 1, 1.5 & Stellar metallicity \\
+% $A_V$ & mag & $-0.1$ to $2$ & Extinction in $V$-band \\
+%% $f^{Y}$ & - & $0$ to $1$ & Light fraction on the younger component \\
+%\bottomrule     
+%\end{tabular}
+%\caption{T80S telescope optical specifications}
+%\end{table}
+
+To describe in a more practical way, we arranged all the steps involved on the estimation of the stellar properties such as stellar mass of a galaxy with a template-redshift $p(z_i, T_j|\vec{C}, m_0)$.
+
+The pre-processing steps on the BPZ templates done are:
+
+\begin{itemize}
+\item Remove BPZ emission lines: To compare stelllar population models with BPZ templates, the BPZ emission lines must be removed. On figure \ref{fig:bpz_templates} we draw the 11 BPZ templates marking in red the emission lines that were removed from spectra.
+
+\item Interpolate BPZ templates: The emission line free templates are lineary interpolated between them 3 times as it is done on BPZ so, for each redshift bin, there is 41 templates.
+
+\item For each $(i, j)$ pair on the template-redshift space, evaluate the template magnitudes $m^T_{i,j}$ for the filters of the survey we are going to measure the properties.
+
+\end{itemize}
+
+This BPZ template magnitudes $m^T_{i,j}$ are going to be fit by a set of random composite stellar populations \textbf{(define parameters of the CSPs)} \ref{tab:ListOfParameters}. To speed up the PDF calculation, we used the emcee code \citep{ForemanMackey.etal.2013a} to map the probability space on regions where the probability is not so negligible. The emcee code is a Python code that implements the affine-invariant ensamble sampler for Markov Chain Monte Carlo (MCMC). We randomly initialize 70 walkers and sample the parameter space looking for a set of most probable likelihoods. To achieve that, we run each walker for 3000 steps, removing the first 1000 steps as burn-in phase. Visual inspection of the chains was done to make sure this burn-in phase was met.
+
+%From the remaining steps, we evaluate fine (1000 steps) histograms on all properties. The result is a likelihood array $\p(\vec{\theta}|z_i, T_j)$ with dimension $N_z, N_T, 1000$ which, combined with the photometric redshift $p(z_i,T_j|\vec{C}, m_0)$ on equation \ref{eq:stellar_pop_props} will give us the stellar properties.
+
+\begin{figure}
+\begin{adjustwidth*}{1in}{0pt}
+\centering
+\includegraphics[width=0.7\textwidth]{figures/bpz_templates.pdf}
+\end{adjustwidth*}
+\caption{aa}
+\label{fig:bpz_templates}
+\end{figure}
+
+\section{Stellar masses estimates}
 
 \section{Validation of the SED fitting}
 
